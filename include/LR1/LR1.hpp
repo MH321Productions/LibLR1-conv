@@ -1,0 +1,4 @@
+#ifndef LIBLR1_CONV_LR1_HPP
+#define LIBLR1_CONV_LR1_HPP
+
+#endif //LIBLR1_CONV_LR1_HPP
