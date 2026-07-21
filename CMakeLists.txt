@@ -3,12 +3,21 @@ project(LibLR1-conv)
 
 set(CMAKE_CXX_STANDARD 20)
 
+find_package(nlohmann_json REQUIRED)
+
+if (APPLE)
+    include_directories(/opt/homebrew/include)
+    link_directories(/opt/homebrew/lib)
+endif ()
 
 add_library(LR1 SHARED
-        src/formats/bmp.cpp
         src/io/BinaryReader.cpp
         src/jam/JamEntries.cpp
         src/jam/JamExtractor.cpp
+        src/formats/bmp.cpp
+        src/formats/srf.cpp
+        src/formats/audio.cpp
 )
 target_include_directories(LR1 PUBLIC include)
 target_include_directories(LR1 PRIVATE external)
+target_link_libraries(LR1 nlohmann_json::nlohmann_json avformat avcodec avutil)
