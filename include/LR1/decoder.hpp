@@ -37,6 +37,26 @@ namespace LR1 {
             virtual bool save(const std::filesystem::path& path, const TDecoded& decoded) = 0;
     };
 
+    template<ResourceType restype, typename TDecoded> class SimpleBinaryDecoder : public virtual Decoder<restype, TDecoded> {
+        public:
+            ~SimpleBinaryDecoder() override = default;
+
+            std::optional<TDecoded> decode(const std::filesystem::path& path) override {
+                reader = BinaryReader(path);
+                return decode();
+            }
+
+            std::optional<TDecoded> decode(const std::vector<uint8_t>& data) override {
+                reader = BinaryReader(data);
+                return decode();
+            }
+
+        protected:
+            BinaryReader reader;
+
+            virtual std::optional<TDecoded> decode() = 0;
+    };
+
 }
 
 #endif //LIBLR1_CONV_DECODER_HPP
