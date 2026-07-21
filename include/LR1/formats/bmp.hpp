@@ -14,20 +14,16 @@ namespace LR1 {
         Color* pixels;
     };
 
-    class BmpDecoder : public virtual Decoder<ResourceType::Image, Bmp> {
+    class BmpDecoder : public virtual SimpleBinaryDecoder<ResourceType::Image, Bmp> {
         public:
             BmpDecoder() = default;
 
-            std::optional<Bmp> decode(const std::filesystem::path &path) override;
-            std::optional<Bmp> decode(const std::vector<uint8_t> &data) override;
-
             bool save(const std::filesystem::path &path, const Bmp &decoded) override;
 
+        protected:
+            std::optional<Bmp> decode() override;
+
         private:
-            BinaryReader reader;
-
-            std::optional<Bmp> decode();
-
             std::vector<uint8_t> readBlock();
             bool readSubBlock(std::vector<uint8_t>& buffer);
     };

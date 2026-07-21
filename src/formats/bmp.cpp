@@ -23,16 +23,6 @@ namespace LR1 {
         RGB = 0x98
     };
 
-    optional<Bmp> BmpDecoder::decode(const path &path) {
-        reader = BinaryReader(path);
-        return decode();
-    }
-
-    optional<Bmp> BmpDecoder::decode(const vector<uint8_t> &data) {
-        reader = BinaryReader(data);
-        return decode();
-    }
-
     optional<Bmp> BmpDecoder::decode() {
         // Determine Encoding
         const uint8_t encodingByte = reader.readByte();
