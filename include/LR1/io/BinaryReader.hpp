@@ -41,7 +41,7 @@ namespace LR1 {
              * and convert it to UTF-8
              * @return The UTF-8 converted String
              */
-            std::string readNullTerminatedWideString();
+            std::string readWideString(const size_t& off = npos);
             std::string readAsciiString(const size_t& numBytes, const size_t& off = npos);
 
         private:

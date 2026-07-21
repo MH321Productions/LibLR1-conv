@@ -21,14 +21,18 @@ namespace LR1 {
         file.close();
     }
 
-    std::string BinaryReader::readNullTerminatedWideString() {
+    std::string BinaryReader::readWideString(const size_t& off) {
         string s;
-        while (true) {
-            const uint16_t ch = readUShort();
+        const size_t startOff = off == npos ? offset : off;
+        size_t i;
+        for (i = 0; ; i += 2) {
+            const uint16_t ch = readUShort(startOff + i);
             if (ch == 0) break;
 
             for (const char& c : getUtf8Bytes(ch)) s.push_back(c);
         }
+
+        if (off == npos) offset += i;
 
         return s;
     }
