@@ -60,7 +60,7 @@ namespace LR1 {
             const uint32_t contentSize = buf.readUInt(currentOffset + 16);
             const vector<uint8_t> content = buf.readBuffer<uint8_t>(contentSize, contentOffset);
 
-            JamFile f(filename, content);
+            JamFile f(filename, content, getResourceType(filename));
             res.push_back(f);
         }
 

@@ -26,6 +26,7 @@ option(LR1_BUILD_TESTS "Build and run the unit tests" ${MAIN_PROJECT})
 
 # Actual library
 add_library(LR1 SHARED
+        src/types.cpp
         src/io/reader.cpp
         src/jam/entries.cpp
         src/jam/extractor.cpp

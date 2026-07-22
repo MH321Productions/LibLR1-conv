@@ -1,6 +1,9 @@
 #ifndef LIBLR1_CONV_TYPES_HPP
 #define LIBLR1_CONV_TYPES_HPP
 
+#include <string>
+#include <filesystem>
+
 namespace LR1 {
     /**
      * The resource types currently supported with a decoder
@@ -19,6 +22,9 @@ namespace LR1 {
          */
         Unsupported
     };
+
+    ResourceType getResourceType(const std::string& filename);
+    ResourceType getResourceType(const std::filesystem::path& path);
 }
 
 #endif //LIBLR1_CONV_TYPES_HPP
