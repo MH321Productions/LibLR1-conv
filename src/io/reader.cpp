@@ -10,7 +10,7 @@ constexpr uint8_t startByteTemplate3 = 0b1110'0000;
 constexpr uint8_t followByteTemplate = 0b10'000000;
 constexpr char a0a5 = 0b00'111111;
 constexpr uint16_t a6b2 = 0b00000'11111'000000;
-constexpr uint8_t a6b3 = 0b0000'111111'000000;
+constexpr uint16_t a6b3 = 0b0000'111111'000000;
 
 namespace LR1 {
     BinaryReader::BinaryReader(const path &path) : data(file_size(path)), offset(0) {

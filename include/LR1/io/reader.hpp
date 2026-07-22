@@ -5,6 +5,7 @@
 #include <vector>
 #include <filesystem>
 #include <string>
+#include <cstring>
 
 namespace LR1 {
     class BinaryReader {
