@@ -4,6 +4,13 @@ project(LibLR1-conv)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(nlohmann_json REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(libav REQUIRED IMPORTED_TARGET
+    libavformat
+    libavcodec
+    libavutil
+)
 
 if (APPLE)
     include_directories(/opt/homebrew/include)
