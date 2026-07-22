@@ -8,7 +8,6 @@
 namespace LR1 {
     class SrfDecoder : public virtual SimpleBinaryDecoder<ResourceType::Text, std::vector<std::string>> {
         public:
-
             bool save(const std::filesystem::path &path, const std::vector<std::string> &decoded) override;
 
         protected:
