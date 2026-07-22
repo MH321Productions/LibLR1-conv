@@ -2,7 +2,7 @@
 #define LIBLR1_CONV_BMP_HPP
 
 #include <LR1/decoder.hpp>
-#include <LR1/io/BinaryReader.hpp>
+#include <LR1/io/reader.hpp>
 
 namespace LR1 {
     struct Color {

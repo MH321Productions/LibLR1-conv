@@ -7,7 +7,7 @@
 #include <optional>
 
 #include <LR1/types.hpp>
-#include <LR1/io/BinaryReader.hpp>
+#include <LR1/io/reader.hpp>
 
 namespace LR1 {
     struct JamDirectory;

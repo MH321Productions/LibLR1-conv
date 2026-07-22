@@ -11,9 +11,9 @@ if (APPLE)
 endif ()
 
 add_library(LR1 SHARED
-        src/io/BinaryReader.cpp
-        src/jam/JamEntries.cpp
-        src/jam/JamExtractor.cpp
+        src/io/reader.cpp
+        src/jam/entries.cpp
+        src/jam/extractor.cpp
         src/formats/bmp.cpp
         src/formats/srf.cpp
         src/formats/audio.cpp

@@ -1,12 +1,11 @@
 #ifndef LIBLR1_CONV_DECODER_HPP
 #define LIBLR1_CONV_DECODER_HPP
 
-#include <cinttypes>
 #include <optional>
 #include <filesystem>
 #include <vector>
 
-#include "jam/JamExtractor.hpp"
+#include "jam/extractor.hpp"
 
 namespace LR1 {
     struct FileWrapper {

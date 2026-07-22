@@ -1,4 +1,4 @@
-#include <LR1/jam/JamExtractor.hpp>
+#include <LR1/jam/extractor.hpp>
 
 using namespace std;
 using namespace std::filesystem;

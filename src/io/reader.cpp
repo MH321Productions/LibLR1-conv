@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include <LR1/io/BinaryReader.hpp>
+#include <LR1/io/reader.hpp>
 
 using namespace std;
 using namespace std::filesystem;
