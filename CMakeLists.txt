@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.4)
+cmake_minimum_required(VERSION 3.19) #TODO: Check if this version works
 project(LibLR1-conv)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -44,6 +44,7 @@ if (LR1_BUILD_TESTS)
     enable_testing()
     message(STATUS "Building tests is enabled")
 
+    # Jam Extractor
     add_executable(JamExtractor test/jam/extractJam.cpp)
     target_link_libraries(JamExtractor LR1)
     add_test(NAME "JamExtractor with real file" COMMAND JamExtractor res/NORMAL.JAM WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test)
