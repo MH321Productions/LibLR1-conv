@@ -13,6 +13,7 @@ namespace LR1 {
         {".PCM", ResourceType::Audio},
         {".SRF", ResourceType::Text},
         {".GDB", ResourceType::Model},
+        {".BVB", ResourceType::Mesh}
     };
 
     static ResourceType mapExtension(const string& extension) {

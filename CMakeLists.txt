@@ -13,6 +13,7 @@ endif()
 # Imports
 find_package(nlohmann_json REQUIRED)
 find_package(PkgConfig REQUIRED)
+find_package(glm REQUIRED)
 
 pkg_check_modules(libav REQUIRED IMPORTED_TARGET
     libavformat
@@ -35,6 +36,7 @@ add_library(LR1 SHARED
         src/formats/bmp.cpp
         src/formats/srf.cpp
         src/formats/audio.cpp
+        src/formats/bvb.cpp
 )
 target_include_directories(LR1 PUBLIC include)
 target_include_directories(LR1 PRIVATE external)
