@@ -28,6 +28,8 @@ option(LR1_BUILD_TESTS "Build and run the unit tests" ${MAIN_PROJECT})
 add_library(LR1 SHARED
         src/types.cpp
         src/io/reader.cpp
+        src/io/writer.cpp
+        src/io/binaryfilehelper.cpp
         src/jam/entries.cpp
         src/jam/extractor.cpp
         src/formats/bmp.cpp

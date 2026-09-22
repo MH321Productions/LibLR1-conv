@@ -1,6 +1,8 @@
 #include <fstream>
+#include <format>
 
 #include <LR1/io/reader.hpp>
+#include <LR1/io/exceptions.hpp>
 
 using namespace std;
 using namespace std::filesystem;
@@ -21,33 +23,26 @@ namespace LR1 {
         file.close();
     }
 
-    std::string BinaryReader::readWideString(const size_t& off) {
+    std::string BinaryReader::readWideString() {
         string s;
-        const size_t startOff = off == npos ? offset : off;
-        size_t i;
-        for (i = 0; ; i += 2) {
-            const uint16_t ch = readUShort(startOff + i);
+        while (true) {
+            const uint16_t ch = readUShort();
             if (ch == 0) break;
 
             for (const char& c : getUtf8Bytes(ch)) s.push_back(c);
         }
 
-        if (off == npos) offset += i;
-
         return s;
     }
 
-    std::string BinaryReader::readAsciiString(const size_t& numBytes, const size_t& off) {
+    std::string BinaryReader::readAsciiString(const size_t& numBytes) {
         string s;
         s.reserve(numBytes);
-        const size_t startOff = off == npos ? offset : off;
         for (size_t i = 0; i < numBytes; i++) {
-            const char ch = readChar(startOff + i);
+            const char ch = readChar();
             if (ch == 0) break;
             s.push_back(ch);
         }
-
-        if (off == npos) offset += numBytes;
 
         return s;
     }
@@ -63,5 +58,40 @@ namespace LR1 {
             static_cast<char>(followByteTemplate | ((ch & a6b3) >> 6)),
             static_cast<char>(followByteTemplate | (ch & a0a5))
         };
+    }
+
+    int32_t BinaryReader::readIntegralWithHeader() {
+        switch (const Token type = expectToken({Token::SByte, Token::Byte, Token::Int32, Token::UShort, Token::Short})) {
+            case Token::SByte: return readChar();
+            case Token::Byte: return readByte();
+            case Token::Int32: return readInt();
+            case Token::UShort: return readUShort();
+            case Token::Short: return readShort();
+            default: throw UnexpectedTypeException(type, offset);
+        }
+    }
+
+    Token BinaryReader::readToken() {
+        return static_cast<Token>(readByte());
+    }
+
+    Token BinaryReader::expectToken(Token expected) {
+        Token actual = readToken();
+        if (actual != expected) throw runtime_error(format("Invalid data. Expected 0x{:x}, got 0x{:x}", static_cast<int>(expected), static_cast<int>(actual)));
+        return actual;
+    }
+
+    Token BinaryReader::expectToken(const set<Token>& expected) {
+        Token actual = readToken();
+        if (!expected.contains(actual)) {
+            string list = "[";
+            for (const Token& token : expected) list.append(format("0x{:x}", static_cast<int>(token)));
+            list.pop_back();
+            list.pop_back();
+            list.push_back(']');
+
+            throw runtime_error(format("Invalid data. Expected {}, got 0x{:x}", list, static_cast<int>(actual)));
+        }
+        return actual;
     }
 }

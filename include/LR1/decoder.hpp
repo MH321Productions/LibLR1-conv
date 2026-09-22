@@ -5,7 +5,8 @@
 #include <filesystem>
 #include <vector>
 
-#include "jam/extractor.hpp"
+#include <LR1/jam/extractor.hpp>
+#include <LR1/io/binaryfilehelper.hpp>
 
 namespace LR1 {
     struct FileWrapper {
@@ -54,6 +55,26 @@ namespace LR1 {
             BinaryReader reader;
 
             virtual std::optional<TDecoded> decode() = 0;
+    };
+
+    template<ResourceType restype, typename TDecoded> class CompressedBinaryDecoder : public virtual Decoder<restype, TDecoded> {
+    public:
+        ~CompressedBinaryDecoder() override = default;
+
+        std::optional<TDecoded> decode(const std::filesystem::path& path) override {
+            reader = BinaryFileHelper::decompress(BinaryReader(path));
+            return decode();
+        }
+
+        std::optional<TDecoded> decode(const std::vector<uint8_t>& data) override {
+            reader = BinaryFileHelper::decompress(BinaryReader(data));
+            return decode();
+        }
+
+    protected:
+        BinaryReader reader;
+
+        virtual std::optional<TDecoded> decode() = 0;
     };
 
 }
