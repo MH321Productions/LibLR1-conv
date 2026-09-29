@@ -13,11 +13,19 @@
 
 namespace LR1 {
     struct Polygon {
+        int v0, v1, v2;
+        int material;
 
+        static Polygon read(BinaryReader& reader);
     };
 
     struct PolygonRange {
+        int child0, child1;
+        int planeNormalXFixed, planeNormalYFixed, planeNormalZFixed;
+        float planeNormalX, planeNormalY, planeNormalZ;
+        int firstPolygonIndex, polygonCount;
 
+        static PolygonRange read(BinaryReader& reader);
     };
 
     struct Mesh {
@@ -33,8 +41,14 @@ namespace LR1 {
 
             bool save(const std::filesystem::path &path, const Mesh &decoded) override;
 
-        private:
+        protected:
             std::optional<Mesh> decode() override;
+
+        private:
+            static constexpr uint8_t IdMaterials = 0x27;
+            static constexpr uint8_t IdPolygons = 0x2D;
+            static constexpr uint8_t IdVertices = 0x34;
+            static constexpr uint8_t IdPolygonRanges = 0x8E;
     };
 }
 
