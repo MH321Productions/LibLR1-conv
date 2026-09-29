@@ -35,16 +35,23 @@ namespace LR1 {
         return s;
     }
 
-    std::string BinaryReader::readAsciiString(const size_t& numBytes) {
+    std::string BinaryReader::readString(const size_t& numBytes) {
+        const size_t currentOffset = offset;
         string s;
-        s.reserve(numBytes);
         for (size_t i = 0; i < numBytes; i++) {
             const char ch = readChar();
             if (ch == 0) break;
             s.push_back(ch);
         }
 
+        seek(currentOffset + numBytes);
+
         return s;
+    }
+
+    std::string BinaryReader::readStringWithHeader(const size_t& numBytes) {
+        expectToken(Token::String);
+        return readString(numBytes);
     }
 
     std::vector<char> BinaryReader::getUtf8Bytes(const uint16_t& ch) {

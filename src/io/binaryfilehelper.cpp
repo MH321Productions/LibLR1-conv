@@ -40,7 +40,7 @@ namespace LR1 {
 
         switch (blockId) {
             case Token::String:
-                writer.writeStringWithHeader(reader.readAsciiString());
+                writer.writeStringWithHeader(reader.readString());
                 break;
 
             case Token::Float:
