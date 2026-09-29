@@ -31,6 +31,7 @@ add_library(LR1 SHARED
         src/io/reader.cpp
         src/io/writer.cpp
         src/io/binaryfilehelper.cpp
+        src/io/serializers.cpp
         src/jam/entries.cpp
         src/jam/extractor.cpp
         src/formats/bmp.cpp

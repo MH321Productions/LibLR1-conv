@@ -15,6 +15,16 @@ namespace LR1 {
             const Token type;
             const size_t offset;
     };
+
+    class UnexpectedBlockException : public std::runtime_error {
+    public:
+        UnexpectedBlockException(const uint8_t& type, const size_t& offset) :
+            std::runtime_error(std::format("Unexpected block 0x{:x} at 0x{:x}", static_cast<int>(type), offset)),
+            type(type), offset(offset) {}
+
+        const uint8_t type;
+        const size_t offset;
+    };
 }
 
 #endif //LIBLR1_CONV_EXCEPTIONS_HPP

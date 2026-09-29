@@ -8,9 +8,20 @@
 #include <cstring>
 #include <set>
 
+#include <glm/glm.hpp>
+
 #include <LR1/io/token.hpp>
+#include <LR1/io/serializers.hpp>
 
 namespace LR1 {
+    class BinaryReader;
+
+    template<typename TSerializer, typename TData>
+    concept ISerializer = requires(BinaryReader& reader)
+    {
+        {TSerializer::read(reader)} -> std::same_as<TData>;
+    };
+
     class BinaryReader {
         public:
             static constexpr size_t npos = -1;
@@ -21,6 +32,7 @@ namespace LR1 {
 
             [[nodiscard]] size_t position() const { return offset; }
             [[nodiscard]] size_t size() const { return data.size(); }
+            void seek(const size_t& pos) { offset = pos; }
 
             //Read simple primitives
             uint8_t readByte() {return readNumber<uint8_t>();}
@@ -62,7 +74,27 @@ namespace LR1 {
              * @return The UTF-8 converted String
              */
             std::string readWideString();
-            std::string readAsciiString(const size_t& numBytes = -1);
+            std::string readString(const size_t& numBytes = -1);
+            std::string readStringWithHeader(const size_t& numBytes = -1);
+
+            //Read serializable
+            template<typename TData, ISerializer<TData> TSerializer = TData> TData readSerializable() {return TSerializer::read(*this);}
+            template<typename TData> TData readSerializable(const std::function<TData(BinaryReader&)>& deserializer) {return deserializer(*this);}
+
+            template<typename TData> std::vector<TData> readArrayBlock(const std::function<TData(BinaryReader&)>& deserializer) {
+                expectToken(Token::LeftBracket);
+                int arrayLen = readIntWithHeader();
+                std::vector<TData> result(arrayLen);
+                expectToken(Token::RightBracket);
+                expectToken(Token::LeftCurly);
+                for (int i = 0; i < arrayLen; i++) result.at(i) = readSerializable(deserializer);
+                expectToken(Token::RightCurly);
+                return result;
+            }
+            template<typename TData, ISerializer<TData> TSerializer = TData> std::vector<TData> readArrayBlock() {return readArrayBlock<TData>(&TSerializer::read);}
+
+            std::vector<glm::vec3> readVector3fArrayBlock() {return readArrayBlock<glm::vec3, Serializers::vec3>();}
+            std::vector<std::string> readStringArrayBlock() {return readArrayBlock<std::string, Serializers::string>();}
 
         private:
             std::vector<uint8_t> data;
