@@ -15,7 +15,7 @@ namespace LR1 {
     optional<JamDirectory> JamExtractor::loadJam(const path& p) {
         buf = BinaryReader(p);
 
-        if (buf.readAsciiString(4, 0) != "LJAM") {
+        if (buf.readString(4) != "LJAM") {
             cerr << "The file " << p << " is not a JAM file" << endl;
             return nullopt;
         }
@@ -29,9 +29,10 @@ namespace LR1 {
     }
 
     void JamExtractor::recurseChildren(JamDirectory& dir, const size_t& offset) {
-        uint32_t numChildFiles = buf.readUInt(offset);
+        buf.seek(offset);
+        uint32_t numChildFiles = buf.readUInt();
         if (!numChildFiles) { //No child files, only folders
-            for (JamDirectory& subdir : listDirectories(buf.readUInt(offset + 4), offset + 8)) {
+            for (JamDirectory& subdir : listDirectories(buf.readUInt(), offset + 8)) {
                 recurseChildren(subdir, subdir.offset);
                 dir.addChild(subdir);
             }
@@ -41,7 +42,8 @@ namespace LR1 {
             }
 
             const size_t folderCountPos = numChildFiles * 20 + offset + 4;
-            uint32_t folderCount = buf.readUInt(folderCountPos);
+            buf.seek(folderCountPos);
+            uint32_t folderCount = buf.readUInt();
             if (folderCount) {
                 for (JamDirectory& subdir : listDirectories(folderCount, folderCountPos + 4)) {
                     recurseChildren(subdir, subdir.offset);
@@ -55,10 +57,12 @@ namespace LR1 {
         vector<JamFile> res;
         for (uint32_t i = 0; i < number; i++) {
             const size_t currentOffset = offset + i * 20;
-            const string filename = buf.readAsciiString(12, currentOffset);
-            const uint32_t contentOffset = buf.readUInt(currentOffset + 12);
-            const uint32_t contentSize = buf.readUInt(currentOffset + 16);
-            const vector<uint8_t> content = buf.readBuffer<uint8_t>(contentSize, contentOffset);
+            buf.seek(currentOffset);
+            const string filename = buf.readString(12);
+            const uint32_t contentOffset = buf.readUInt();
+            const uint32_t contentSize = buf.readUInt();
+            buf.seek(contentOffset);
+            const vector<uint8_t> content = buf.readBytes(contentSize);
 
             JamFile f(filename, content, getResourceType(filename));
             res.push_back(f);
@@ -72,8 +76,9 @@ namespace LR1 {
         res.reserve(number);
         for (uint32_t i = 0; i < number; i++) {
             const size_t currentOffset = offset + i * 16;
-            const string dirname = buf.readAsciiString(12, currentOffset);
-            const size_t dirOffset = buf.readUInt(currentOffset + 12);
+            buf.seek(currentOffset);
+            const string dirname = buf.readString(12);
+            const size_t dirOffset = buf.readUInt();
             JamDirectory dir(dirname, dirOffset);
             res.push_back(dir);
         }

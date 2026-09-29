@@ -62,12 +62,14 @@ namespace LR1 {
         ~CompressedBinaryDecoder() override = default;
 
         std::optional<TDecoded> decode(const std::filesystem::path& path) override {
-            reader = BinaryFileHelper::decompress(BinaryReader(path));
+            BinaryReader rawReader(path);
+            reader = BinaryFileHelper::decompress(rawReader);
             return decode();
         }
 
         std::optional<TDecoded> decode(const std::vector<uint8_t>& data) override {
-            reader = BinaryFileHelper::decompress(BinaryReader(data));
+            BinaryReader rawReader(data);
+            reader = BinaryFileHelper::decompress(rawReader);
             return decode();
         }
 

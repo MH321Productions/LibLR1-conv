@@ -19,7 +19,8 @@ optional<vector<string> > LR1::SrfDecoder::decode() {
 
     vector<string> strings(numStrings);
     for (size_t i = 0; i < numStrings; i++) {
-        strings.at(i) = reader.readWideString(2 * (offsets.at(i) + numStrings + 2));
+        reader.seek(2 * (offsets.at(i) + numStrings + 2));
+        strings.at(i) = reader.readWideString();
     }
 
     return strings;
