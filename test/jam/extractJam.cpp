@@ -9,7 +9,7 @@ using namespace filesystem;
 int ret = 0;
 
 void weakAssert(const bool& cond, const string& failureMsg = "");
-void assert(const bool& cond, const string& failureMsg = "");
+void strongAssert(const bool& cond, const string& failureMsg = "");
 int findFile(const LR1::JamDirectory& dir, const string& name);
 int findDir(const LR1::JamDirectory& dir, const string& name);
 
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     LR1::JamExtractor extractor;
     optional<LR1::JamDirectory> jamDir = extractor.loadJam(jamPath);
 
-    assert(jamDir.has_value(), "The file couldn't be parsed");
+    strongAssert(jamDir.has_value(), "The file couldn't be parsed");
 
     weakAssert(jamDir->childFiles.empty(), "The root directory shouldn't have child files");
     weakAssert(jamDir->childDirectories.size() == 2, "The root directory should have two child directories");
@@ -88,7 +88,7 @@ void weakAssert(const bool& cond, const string& failureMsg) {
     }
 }
 
-void assert(const bool& cond, const string& failureMsg) {
+void strongAssert(const bool& cond, const string& failureMsg) {
     if (!cond) {
         cerr << failureMsg << endl;
         exit(++ret);
