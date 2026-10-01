@@ -101,4 +101,10 @@ namespace LR1 {
         }
         return actual;
     }
+
+    bool BinaryReader::next(const Token expected) {
+        const Token actual = readToken();
+        offset--;
+        return actual == expected;
+    }
 }

@@ -7,6 +7,7 @@
 #include <string>
 #include <cstring>
 #include <set>
+#include <map>
 
 #include <glm/glm.hpp>
 
@@ -66,6 +67,7 @@ namespace LR1 {
             Token readToken();
             Token expectToken(Token expected);
             Token expectToken(const std::set<Token>& expected);
+            bool next(Token expected);
 
             //Read text
             /**
@@ -92,6 +94,36 @@ namespace LR1 {
                 return result;
             }
             template<typename TData, ISerializer<TData> TSerializer = TData> std::vector<TData> readArrayBlock() {return readArrayBlock<TData>(&TSerializer::read);}
+
+            template<typename TData> TData readStruct(const std::function<TData(BinaryReader&)>& deserializer) {
+                expectToken(Token::LeftCurly);
+                TData res = deserializer(*this);
+                expectToken(Token::RightCurly);
+
+                return res;
+            }
+            template<typename TData, ISerializer<TData> TSerializer = TData> TData readStruct() {return readStruct<TData>(&TSerializer::read);}
+
+            template<typename TData> std::map<std::string, TData> readDictionaryBlock(const std::function<TData(BinaryReader&)>& deserializer, const uint8_t& typeByte) {
+                std::map<std::string, TData> result;
+                expectToken(Token::LeftBracket);
+                const int len = readIntWithHeader();
+                expectToken(Token::RightBracket);
+
+                expectToken(Token::LeftCurly);
+                for (int i = 0; i < len; i++) {
+                    expectToken(static_cast<Token>(typeByte));
+
+                    std::string key = std::format("{}", i);
+                    if (next(Token::String)) key = readStringWithHeader();
+
+                    TData value = readStruct(deserializer);
+                    result.emplace(key, value);
+                }
+                expectToken(Token::RightCurly);
+                return result;
+            }
+            template<typename TData, ISerializer<TData> TSerializer = TData> std::map<std::string, TData> readDictionaryBlock() {return readDictionaryBlock<TData>(&TSerializer::read);}
 
             std::vector<glm::vec3> readVector3fArrayBlock() {return readArrayBlock<glm::vec3, Serializers::vec3>();}
             std::vector<std::string> readStringArrayBlock() {return readArrayBlock<std::string, Serializers::string>();}
