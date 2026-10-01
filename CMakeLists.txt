@@ -38,6 +38,8 @@ add_library(LR1 SHARED
         src/formats/srf.cpp
         src/formats/audio.cpp
         src/formats/bvb.cpp
+        src/formats/mdb.cpp
+        src/utils/color.cpp
 )
 target_include_directories(LR1 PUBLIC include)
 target_include_directories(LR1 PRIVATE external)

@@ -14,6 +14,7 @@ namespace LR1 {
         Text,
         Model,
         Mesh,
+        Material,
 
 
         /**
