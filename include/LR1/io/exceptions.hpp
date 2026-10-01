@@ -25,6 +25,16 @@ namespace LR1 {
         const uint8_t type;
         const size_t offset;
     };
+
+    class UnexpectedPropertyException : public std::runtime_error {
+        public:
+            UnexpectedPropertyException(const uint8_t& propId, const size_t& offset) :
+                std::runtime_error(std::format("Unexpected property 0x{:x} at 0x{:x}", propId, offset)),
+                propId(propId), offset(offset) {}
+
+            const uint8_t propId;
+            const size_t offset;
+    };
 }
 
 #endif //LIBLR1_CONV_EXCEPTIONS_HPP
