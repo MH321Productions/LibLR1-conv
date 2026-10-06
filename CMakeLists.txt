@@ -28,6 +28,7 @@ option(LR1_BUILD_CONV "Build the simple converter program" ${MAIN_PROJECT})
 
 # Actual library
 add_library(LR1 SHARED
+        src/LR1/LR1.cpp
         src/LR1/types.cpp
         src/LR1/io/reader.cpp
         src/LR1/io/writer.cpp
