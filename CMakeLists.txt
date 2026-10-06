@@ -23,6 +23,7 @@ pkg_check_modules(libav REQUIRED IMPORTED_TARGET
 
 # Options
 option(LR1_BUILD_TESTS "Build and run the unit tests" ${MAIN_PROJECT})
+option(LR1_BUILD_CONV "Build the simple converter program" ${MAIN_PROJECT})
 
 
 # Actual library
@@ -44,6 +45,17 @@ add_library(LR1 SHARED
 target_include_directories(LR1 PUBLIC include)
 target_include_directories(LR1 PRIVATE external)
 target_link_libraries(LR1 nlohmann_json::nlohmann_json PkgConfig::libav)
+
+if (LR1_BUILD_CONV)
+    add_library(tinyfiledialogs STATIC external/tinyfiledialogs/tinyfiledialogs.c)
+
+    add_executable(LR1-conv WIN32
+            src/Converter/main.cpp
+    )
+    target_include_directories(LR1-conv PUBLIC include)
+    target_include_directories(LR1-conv PUBLIC external)
+    target_link_libraries(LR1-conv PUBLIC LR1 tinyfiledialogs)
+endif()
 
 # Tests
 if (LR1_BUILD_TESTS)
