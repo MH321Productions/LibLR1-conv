@@ -124,7 +124,7 @@ namespace LR1 {
                 expectToken(Token::RightCurly);
                 return result;
             }
-            template<typename TData, ISerializer<TData> TSerializer = TData> std::map<std::string, TData> readDictionaryBlock() {return readDictionaryBlock<TData>(&TSerializer::read);}
+            template<typename TData, ISerializer<TData> TSerializer = TData> std::map<std::string, TData> readDictionaryBlock(const uint8_t& typeByte) {return readDictionaryBlock<TData>(&TSerializer::read, typeByte);}
 
             std::vector<glm::vec3> readVector3fArrayBlock() {return readArrayBlock<glm::vec3, Serializers::vec3>();}
             std::vector<std::string> readStringArrayBlock() {return readArrayBlock<std::string, Serializers::string>();}

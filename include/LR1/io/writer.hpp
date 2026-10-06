@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cinttypes>
+#include <cstring>
 
 #include <LR1/io/token.hpp>
 
