@@ -27,19 +27,19 @@ option(LR1_BUILD_TESTS "Build and run the unit tests" ${MAIN_PROJECT})
 
 # Actual library
 add_library(LR1 SHARED
-        src/types.cpp
-        src/io/reader.cpp
-        src/io/writer.cpp
-        src/io/binaryfilehelper.cpp
-        src/io/serializers.cpp
-        src/jam/entries.cpp
-        src/jam/extractor.cpp
-        src/formats/bmp.cpp
-        src/formats/srf.cpp
-        src/formats/audio.cpp
-        src/formats/bvb.cpp
-        src/formats/mdb.cpp
-        src/utils/color.cpp
+        src/LR1/types.cpp
+        src/LR1/io/reader.cpp
+        src/LR1/io/writer.cpp
+        src/LR1/io/binaryfilehelper.cpp
+        src/LR1/io/serializers.cpp
+        src/LR1/jam/entries.cpp
+        src/LR1/jam/extractor.cpp
+        src/LR1/formats/bmp.cpp
+        src/LR1/formats/srf.cpp
+        src/LR1/formats/audio.cpp
+        src/LR1/formats/bvb.cpp
+        src/LR1/formats/mdb.cpp
+        src/LR1/utils/color.cpp
 )
 target_include_directories(LR1 PUBLIC include)
 target_include_directories(LR1 PRIVATE external)
