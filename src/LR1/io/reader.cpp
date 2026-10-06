@@ -44,7 +44,7 @@ namespace LR1 {
             s.push_back(ch);
         }
 
-        seek(currentOffset + numBytes);
+        if (numBytes != npos) seek(currentOffset + numBytes);
 
         return s;
     }
