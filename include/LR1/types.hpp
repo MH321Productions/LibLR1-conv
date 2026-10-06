@@ -30,7 +30,8 @@ namespace LR1 {
     ResourceType getResourceType(const std::filesystem::path& path);
 
     namespace Types {
-        extern const std::map<std::string, ResourceType> extensionMap;
+        extern const std::map<std::string, ResourceType> inputExtensionMap;
+        extern const std::map<ResourceType, std::string> outputExtensionMap;
     }
 }
 

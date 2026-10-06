@@ -6,7 +6,7 @@ using namespace std;
 using namespace std::filesystem;
 
 namespace LR1 {
-    const map<string, ResourceType> Types::extensionMap = {
+    const map<string, ResourceType> Types::inputExtensionMap = {
         {".BMP", ResourceType::Image},
         {".TUN", ResourceType::Audio},
         {".tun", ResourceType::Audio},
@@ -17,9 +17,18 @@ namespace LR1 {
         {".MDB", ResourceType::Material}
     };
 
+    const map<ResourceType, string> Types::outputExtensionMap = {
+        {ResourceType::Image, ".png"},
+        {ResourceType::Audio, ".wav"},
+        {ResourceType::Text, ".json"},
+        {ResourceType::Model, ".obj"},   //TODO: Find better format
+        {ResourceType::Mesh, ".obj"},    //TODO: Find better format
+        {ResourceType::Material, ".mtl"} //TODO: Find better format
+    };
+
     static ResourceType mapExtension(const string& extension) {
-        if (!Types::extensionMap.contains(extension)) return ResourceType::Unsupported;
-        return Types::extensionMap.at(extension);
+        if (!Types::inputExtensionMap.contains(extension)) return ResourceType::Unsupported;
+        return Types::inputExtensionMap.at(extension);
     }
 
     ResourceType getResourceType(const std::string& filename) {
