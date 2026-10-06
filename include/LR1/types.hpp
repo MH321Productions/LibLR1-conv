@@ -3,6 +3,7 @@
 
 #include <string>
 #include <filesystem>
+#include <map>
 
 namespace LR1 {
     /**
@@ -27,6 +28,10 @@ namespace LR1 {
 
     ResourceType getResourceType(const std::string& filename);
     ResourceType getResourceType(const std::filesystem::path& path);
+
+    namespace Types {
+        extern const std::map<std::string, ResourceType> extensionMap;
+    }
 }
 
 #endif //LIBLR1_CONV_TYPES_HPP

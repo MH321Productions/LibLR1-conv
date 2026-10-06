@@ -6,7 +6,7 @@ using namespace std;
 using namespace std::filesystem;
 
 namespace LR1 {
-    static const map<string, ResourceType> extensionMap = {
+    const map<string, ResourceType> Types::extensionMap = {
         {".BMP", ResourceType::Image},
         {".TUN", ResourceType::Audio},
         {".tun", ResourceType::Audio},
@@ -18,8 +18,8 @@ namespace LR1 {
     };
 
     static ResourceType mapExtension(const string& extension) {
-        if (!extensionMap.contains(extension)) return ResourceType::Unsupported;
-        return extensionMap.at(extension);
+        if (!Types::extensionMap.contains(extension)) return ResourceType::Unsupported;
+        return Types::extensionMap.at(extension);
     }
 
     ResourceType getResourceType(const std::string& filename) {
