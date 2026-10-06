@@ -105,6 +105,9 @@ namespace LR1 {
 
         protected:
             std::optional<std::map<std::string, Material>> decode() override;
+
+        private:
+            static constexpr uint8_t idMaterial = 0x27;
     };
 }
 

@@ -1,6 +1,11 @@
+#include <fstream>
+
 #include <LR1/io/reader.hpp>
 #include <LR1/formats/mdb.hpp>
 #include <LR1/io/exceptions.hpp>
+
+using namespace std;
+using namespace std::filesystem;
 
 namespace LR1 {
     MaterialBlend MaterialBlend::read(BinaryReader& reader) {
@@ -150,5 +155,43 @@ namespace LR1 {
         }
 
         return mat;
+    }
+
+    optional<map<string, Material>> MdbDecoder::decode() {
+        map<string, Material> res;
+
+        while (reader.position() < reader.size()) {
+            const uint8_t blockId = reader.readByte();
+            if (blockId == idMaterial) {
+                res = reader.readDictionaryBlock<Material>(blockId);
+            } else {
+                throw UnexpectedBlockException(blockId, reader.position() - 1);
+            }
+        }
+
+        return res;
+    }
+
+    bool MdbDecoder::save(const path& path, const map<string, Material>& decoded) { //TODO: Find better format and export more info
+        ofstream file(path);
+        if (!file) return false;
+
+        for (const auto&[name, mat] : decoded) {
+            file << "newmtl " << name << endl;
+            file << "Ka " << mat.ambientColor.rF() << " " << mat.ambientColor.gF() << " " << mat.ambientColor.bF() << endl;
+            file << "Kd " << mat.diffuseColor.rF() << " " << mat.diffuseColor.gF() << " " << mat.diffuseColor.bF() << endl;
+            file << "d " << mat.diffuseColor.aF() << endl;
+            file << "illum 2" << endl;
+
+            if (!mat.textureName.empty()) {
+                file << "map_Ka " << mat.textureName << endl;
+                file << "map_Kd " << mat.textureName << endl;
+            }
+
+            file << endl;
+        }
+
+        file.close();
+        return true;
     }
 }
