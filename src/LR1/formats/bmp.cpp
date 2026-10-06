@@ -12,6 +12,7 @@
 #include <stb/stb_image_write.h>
 
 #include <LR1/formats/bmp.hpp>
+#include <LR1/utils/color.hpp>
 
 using namespace std;
 using namespace std::filesystem;
@@ -120,7 +121,7 @@ namespace LR1 {
     }
 
     bool BmpDecoder::save(const path& path, const Bmp& decoded) {
-        return stbi_write_png(path.string().c_str(), decoded.width, decoded.height, 3, decoded.pixels, decoded.width * 3);
+        return stbi_write_png(path.string().c_str(), decoded.width, decoded.height, 4, decoded.pixels, decoded.width * 4);
     }
 
     vector<uint8_t> BmpDecoder::readBlock() {

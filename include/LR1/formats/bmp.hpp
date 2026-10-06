@@ -5,9 +5,7 @@
 #include <LR1/io/reader.hpp>
 
 namespace LR1 {
-    struct Color {
-        uint8_t r, g, b;
-    };
+    struct Color;
 
     struct Bmp {
         int width, height;
