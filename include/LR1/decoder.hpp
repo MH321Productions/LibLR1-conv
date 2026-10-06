@@ -24,16 +24,17 @@ namespace LR1 {
         [[nodiscard]] std::string extension() const {return isRealFile() ? realPath.extension().string() : jamFile.extension();}
     };
 
-    template<ResourceType restype> class Converter {
+    class Converter {
     public:
-        static ResourceType getType() {return restype;}
+        virtual ~Converter() = default;
 
         virtual bool convert(const std::filesystem::path& in, const std::filesystem::path& out) = 0;
+        virtual bool convert(const std::vector<uint8_t>& in, const std::filesystem::path& out) = 0;
     };
 
-    template<ResourceType restype, typename TDecoded> class Decoder : public virtual Converter<restype> {
+    template<ResourceType restype, typename TDecoded> class Decoder : public virtual Converter {
         public:
-            virtual ~Decoder() = default;
+            ~Decoder() override = default;
 
             static ResourceType getType() {return restype;}
 
@@ -42,6 +43,19 @@ namespace LR1 {
             std::optional<TDecoded> decode(const FileWrapper& wrapper) {return wrapper.isRealFile() ? decode(wrapper.realPath) : decode(wrapper.jamFile.data);}
 
             virtual bool save(const std::filesystem::path& path, const TDecoded& decoded) = 0;
+
+            bool convert(const std::filesystem::path& in, const std::filesystem::path& out) override {
+                const std::optional<TDecoded> val = decode(in);
+                if (val.has_value()) return save(out, val.value());
+                return false;
+            }
+
+            bool convert(const std::vector<uint8_t>& in, const std::filesystem::path& out) override {
+                const std::optional<TDecoded> val = decode(in);
+                if (val.has_value()) return save(out, val.value());
+                return false;
+            }
+
     };
 
     template<ResourceType restype, typename TDecoded> class SimpleBinaryDecoder : public virtual Decoder<restype, TDecoded> {
