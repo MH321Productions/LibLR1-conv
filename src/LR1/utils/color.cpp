@@ -17,6 +17,7 @@ namespace LR1 {
         res.r = static_cast<uint8_t>(reader.readIntegralWithHeader());
         res.g = static_cast<uint8_t>(reader.readIntegralWithHeader());
         res.b = static_cast<uint8_t>(reader.readIntegralWithHeader());
+        res.a = 0xFF;
 
         return res;
     }
