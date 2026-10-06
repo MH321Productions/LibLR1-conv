@@ -24,7 +24,14 @@ namespace LR1 {
         [[nodiscard]] std::string extension() const {return isRealFile() ? realPath.extension().string() : jamFile.extension();}
     };
 
-    template<ResourceType restype, typename TDecoded> class Decoder {
+    template<ResourceType restype> class Converter {
+    public:
+        static ResourceType getType() {return restype;}
+
+        virtual bool convert(const std::filesystem::path& in, const std::filesystem::path& out) = 0;
+    };
+
+    template<ResourceType restype, typename TDecoded> class Decoder : public virtual Converter<restype> {
         public:
             virtual ~Decoder() = default;
 
@@ -58,25 +65,25 @@ namespace LR1 {
     };
 
     template<ResourceType restype, typename TDecoded> class CompressedBinaryDecoder : public virtual Decoder<restype, TDecoded> {
-    public:
-        ~CompressedBinaryDecoder() override = default;
+        public:
+            ~CompressedBinaryDecoder() override = default;
 
-        std::optional<TDecoded> decode(const std::filesystem::path& path) override {
-            BinaryReader rawReader(path);
-            reader = BinaryFileHelper::decompress(rawReader);
-            return decode();
-        }
+            std::optional<TDecoded> decode(const std::filesystem::path& path) override {
+                BinaryReader rawReader(path);
+                reader = BinaryFileHelper::decompress(rawReader);
+                return decode();
+            }
 
-        std::optional<TDecoded> decode(const std::vector<uint8_t>& data) override {
-            BinaryReader rawReader(data);
-            reader = BinaryFileHelper::decompress(rawReader);
-            return decode();
-        }
+            std::optional<TDecoded> decode(const std::vector<uint8_t>& data) override {
+                BinaryReader rawReader(data);
+                reader = BinaryFileHelper::decompress(rawReader);
+                return decode();
+            }
 
-    protected:
-        BinaryReader reader;
+        protected:
+            BinaryReader reader;
 
-        virtual std::optional<TDecoded> decode() = 0;
+            virtual std::optional<TDecoded> decode() = 0;
     };
 
 }
