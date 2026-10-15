@@ -157,7 +157,7 @@ namespace LR1 {
         const uint32_t sampleRate = decoded.sampleRate;
         constexpr uint16_t bitsPerSample = 16;
         const uint16_t bytesPerBlock = numChannels * bitsPerSample / 8;
-        const uint32_t bytesPerSecond = sampleRate;
+        const uint32_t bytesPerSecond = sampleRate * bytesPerBlock;
 
         file << "fmt ";
         file.write(reinterpret_cast<const char*>(&chunkSize), 4);
