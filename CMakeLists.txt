@@ -47,6 +47,13 @@ target_include_directories(LR1 PUBLIC include)
 target_include_directories(LR1 PRIVATE external)
 target_link_libraries(LR1 nlohmann_json::nlohmann_json PkgConfig::libav)
 
+if (NOT MAIN_PROJECT)
+add_custom_command(TARGET LR1 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LR1> ${CMAKE_BINARY_DIR}
+        COMMENT "Copying LR1 to main build directory"
+)
+endif ()
+
 if (LR1_BUILD_CONV)
     add_library(tinyfiledialogs STATIC external/tinyfiledialogs/tinyfiledialogs.c)
 
