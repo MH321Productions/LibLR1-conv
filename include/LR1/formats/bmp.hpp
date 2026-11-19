@@ -4,7 +4,7 @@
 #include <vector>
 
 #include <LR1/decoder.hpp>
-#include <LR1/io/reader.hpp>
+#include <LR1/utils/color.hpp>
 
 namespace LR1 {
     struct Color;

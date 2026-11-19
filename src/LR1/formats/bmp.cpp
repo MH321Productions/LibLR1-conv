@@ -12,7 +12,6 @@
 #include <stb/stb_image_write.h>
 
 #include <LR1/formats/bmp.hpp>
-#include <LR1/utils/color.hpp>
 
 using namespace std;
 using namespace std::filesystem;
