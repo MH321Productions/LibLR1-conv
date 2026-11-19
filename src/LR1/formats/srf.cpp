@@ -8,7 +8,7 @@ using namespace std;
 using namespace std::filesystem;
 using json = nlohmann::json;
 
-optional<vector<string> > LR1::SrfDecoder::decode() {
+optional<vector<string> > LR1::SrfDecoder::decodeInternal() {
     const uint16_t numStrings = reader.readUShort();
     const uint16_t numChars = reader.readUShort();
 

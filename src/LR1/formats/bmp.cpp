@@ -24,7 +24,7 @@ namespace LR1 {
         RGB = 0x98
     };
 
-    optional<Bmp> BmpDecoder::decode() {
+    optional<Bmp> BmpDecoder::decodeInternal() {
         // Determine Encoding
         const uint8_t encodingByte = reader.readByte();
         BmpEncoding encoding;

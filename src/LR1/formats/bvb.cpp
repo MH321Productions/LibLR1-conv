@@ -8,7 +8,7 @@ using namespace std;
 using namespace filesystem;
 
 namespace LR1 {
-    std::optional<Mesh> BvbDecoder::decode() {
+    std::optional<Mesh> BvbDecoder::decodeInternal() {
         Mesh mesh{};
 
         while (reader.position() < reader.size()) {

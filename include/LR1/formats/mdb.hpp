@@ -104,7 +104,7 @@ namespace LR1 {
             bool save(const std::filesystem::path &path, const std::map<std::string, Material> &decoded) override;
 
         protected:
-            std::optional<std::map<std::string, Material>> decode() override;
+            std::optional<std::map<std::string, Material>> decodeInternal() override;
 
         private:
             static constexpr uint8_t idMaterial = 0x27;

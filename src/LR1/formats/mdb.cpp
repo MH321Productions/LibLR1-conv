@@ -157,7 +157,7 @@ namespace LR1 {
         return mat;
     }
 
-    optional<map<string, Material>> MdbDecoder::decode() {
+    optional<map<string, Material>> MdbDecoder::decodeInternal() {
         map<string, Material> res;
 
         while (reader.position() < reader.size()) {

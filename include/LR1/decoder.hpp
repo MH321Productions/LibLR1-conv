@@ -40,7 +40,7 @@ namespace LR1 {
 
             virtual std::optional<TDecoded> decode(const std::filesystem::path& path) = 0;
             virtual std::optional<TDecoded> decode(const std::vector<uint8_t>& data) = 0;
-            std::optional<TDecoded> decode(const FileWrapper& wrapper) {return wrapper.isRealFile() ? decode(wrapper.realPath) : decode(wrapper.jamFile.data);}
+            std::optional<TDecoded> decodeWrapper(const FileWrapper& wrapper) {return wrapper.isRealFile() ? decode(wrapper.realPath) : decode(wrapper.jamFile.data);}
 
             virtual bool save(const std::filesystem::path& path, const TDecoded& decoded) = 0;
 
@@ -64,18 +64,18 @@ namespace LR1 {
 
             std::optional<TDecoded> decode(const std::filesystem::path& path) override {
                 reader = BinaryReader(path);
-                return decode();
+                return decodeInternal();
             }
 
             std::optional<TDecoded> decode(const std::vector<uint8_t>& data) override {
                 reader = BinaryReader(data);
-                return decode();
+                return decodeInternal();
             }
 
         protected:
             BinaryReader reader;
 
-            virtual std::optional<TDecoded> decode() = 0;
+            virtual std::optional<TDecoded> decodeInternal() = 0;
     };
 
     template<ResourceType restype, typename TDecoded> class CompressedBinaryDecoder : public virtual Decoder<restype, TDecoded> {
@@ -85,19 +85,19 @@ namespace LR1 {
             std::optional<TDecoded> decode(const std::filesystem::path& path) override {
                 BinaryReader rawReader(path);
                 reader = BinaryFileHelper::decompress(rawReader);
-                return decode();
+                return decodeInternal();
             }
 
             std::optional<TDecoded> decode(const std::vector<uint8_t>& data) override {
                 BinaryReader rawReader(data);
                 reader = BinaryFileHelper::decompress(rawReader);
-                return decode();
+                return decodeInternal();
             }
 
         protected:
             BinaryReader reader;
 
-            virtual std::optional<TDecoded> decode() = 0;
+            virtual std::optional<TDecoded> decodeInternal() = 0;
     };
 
 }

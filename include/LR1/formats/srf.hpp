@@ -11,7 +11,7 @@ namespace LR1 {
             bool save(const std::filesystem::path &path, const std::vector<std::string> &decoded) override;
 
         protected:
-            std::optional<std::vector<std::string>> decode() override;
+            std::optional<std::vector<std::string>> decodeInternal() override;
     };
 }
 

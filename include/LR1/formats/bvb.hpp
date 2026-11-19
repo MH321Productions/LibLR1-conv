@@ -42,7 +42,7 @@ namespace LR1 {
             bool save(const std::filesystem::path &path, const Mesh &decoded) override;
 
         protected:
-            std::optional<Mesh> decode() override;
+            std::optional<Mesh> decodeInternal() override;
 
         private:
             static constexpr uint8_t IdMaterials = 0x27;

@@ -19,7 +19,7 @@ namespace LR1 {
             bool save(const std::filesystem::path &path, const Bmp &decoded) override;
 
         protected:
-            std::optional<Bmp> decode() override;
+            std::optional<Bmp> decodeInternal() override;
 
         private:
             std::vector<uint8_t> readBlock();
