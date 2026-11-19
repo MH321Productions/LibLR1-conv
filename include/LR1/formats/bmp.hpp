@@ -1,6 +1,8 @@
 #ifndef LIBLR1_CONV_BMP_HPP
 #define LIBLR1_CONV_BMP_HPP
 
+#include <vector>
+
 #include <LR1/decoder.hpp>
 #include <LR1/io/reader.hpp>
 
@@ -9,7 +11,7 @@ namespace LR1 {
 
     struct Bmp {
         int width, height;
-        Color* pixels;
+        std::vector<Color> pixels;
     };
 
     class BmpDecoder : public virtual SimpleBinaryDecoder<ResourceType::Image, Bmp> {

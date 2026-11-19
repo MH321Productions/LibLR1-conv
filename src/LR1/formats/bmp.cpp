@@ -78,16 +78,17 @@ namespace LR1 {
         }
 
         //Allocate buffer and read
-        auto* buffer = new uint8_t[bufferLength];
+        const auto buffer = make_unique_for_overwrite<uint8_t[]>(bufferLength);
         size_t bufferPos = 0;
         while (bufferPos < bufferLength) {
             vector<uint8_t> block = readBlock();
-            memcpy(buffer + bufferPos, block.data(), block.size());
+            memcpy(buffer.get() + bufferPos, block.data(), block.size());
             bufferPos += block.size();
         }
 
         //Convert to RGB
-        auto* pixels = new Color[width * height];
+        vector<Color> pixels;
+        pixels.resize(width * height);
         switch (encoding) {
             case Palette4Bit:
                 for (size_t i = 0; i < width * height; ++i) {
@@ -116,12 +117,11 @@ namespace LR1 {
                 }
         }
 
-
         return Bmp(width, height, pixels);
     }
 
     bool BmpDecoder::save(const path& path, const Bmp& decoded) {
-        return stbi_write_png(path.string().c_str(), decoded.width, decoded.height, 4, decoded.pixels, decoded.width * 4);
+        return stbi_write_png(path.string().c_str(), decoded.width, decoded.height, 4, decoded.pixels.data(), decoded.width * 4);
     }
 
     vector<uint8_t> BmpDecoder::readBlock() {
