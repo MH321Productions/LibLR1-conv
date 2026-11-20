@@ -30,6 +30,7 @@ namespace LR1 {
 
         virtual bool convert(const std::filesystem::path& in, const std::filesystem::path& out) = 0;
         virtual bool convert(const std::vector<uint8_t>& in, const std::filesystem::path& out) = 0;
+        bool convertWrapper(const FileWrapper& in, const std::filesystem::path& out) {return in.isRealFile() ? convert(in.realPath, out) : convert(in.jamFile.data, out); }
     };
 
     template<ResourceType restype, typename TDecoded> class Decoder : public virtual Converter {
